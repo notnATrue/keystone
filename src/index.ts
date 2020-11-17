@@ -1,19 +1,15 @@
-const { Keystone } = require('@keystonejs/keystone');
-const { PasswordAuthStrategy } = require('@keystonejs/auth-password');
-const { Text, Checkbox, Password } = require('@keystonejs/fields');
-const { GraphQLApp } = require('@keystonejs/app-graphql');
-const { AdminUIApp } = require('@keystonejs/app-admin-ui');
-const initialiseData = require('./initial-data');
-const mongoose = require('mongoose');
-
+require('dotenv').config();
+import { Keystone } from '@keystonejs/keystone';
+import { PasswordAuthStrategy } from '@keystonejs/auth-password';
+import { Text, Checkbox, Password } from '@keystonejs/fields';
+import { GraphQLApp } from '@keystonejs/app-graphql';
+import { AdminUIApp } from '@keystonejs/app-admin-ui';
 const { MongooseAdapter: Adapter } = require('@keystonejs/adapter-mongoose');
-const PROJECT_NAME = 'keystoneQl';
-const adapterConfig = { mongoUri: 'mongodb://localhost/keystone-ql' };
-
+const adapterConfig = { mongoUri: process.env.MONGO_URI };
 
 const keystone = new Keystone({
   adapter: new Adapter(adapterConfig),
-  onConnect: process.env.CREATE_TABLES !== 'true' && initialiseData,
+  // onConnect: process.env.CREATE_TABLES !== 'true' && initialiseData,
 });
 
 // Access control functions
@@ -76,25 +72,6 @@ keystone.createList('Todo', {
 
 //~
 
-// keystone.createList('Ticket',{
-//    	autokey: { from: 'title', path: 'slug', unique: true },
-//    });
-   
-//    Ticket.add({
-//            title: { type: String, initial: true, default: '', required: true },  
-//           description: { type: Types.Textarea },   
-//           priority: { type: Types.Select, options: 'Low, Medium, High', default: '  Low' },
-//           category: { type: Types.Select, options: 'Bug, Feature, Enhancement', default: 'Bug' },
-//           status: { type: Types.Select, options: 'New, In Progress, Open, On Hold, Declined, Closed', default: 'New' },
-//           createdBy: { type: Types.Relationship, ref: 'User', index: true, many: false },
-//           assignedTo: { type: Types.Relationship, ref: 'User', index: true, many: false },
-//           createdAt: { type: Datetime, default: Date.now },
-//           updatedAt: { type: Datetime, default: Date.now }
-//       });
-  
-//   Ticket.defaultSort = '-createdAt'; 
-//  Ticket.register();
-
 const authStrategy = keystone.createAuthStrategy({
   type: PasswordAuthStrategy,
   list: 'User',
@@ -105,7 +82,7 @@ module.exports = {
   apps: [
     new GraphQLApp(),
     new AdminUIApp({
-      name: PROJECT_NAME,
+      name: process.env.PROJECT_NAME,
       enableDefaultRoute: true,
       authStrategy,
     }),

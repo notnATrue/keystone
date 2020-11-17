@@ -1,60 +1,60 @@
-const crypto = require('crypto');
-const randomString = () => crypto.randomBytes(6).hexSlice();
+// const crypto = require('crypto');
+// const randomString = () => crypto.randomBytes(6).hexSlice();
 
-module.exports = async keystone => {
+// module.exports = async keystone => {
 
-  const {
-    data: {
-      title: String,
-    },
-  } = await keystone.executeGraphQL({
-    context: keystone.createContext({ skipAccessControl: true }),
-    query: `query {
-      title {
-        Hello
-      }
-    }`,
-  });
+//   // const {
+//   //   data
+//   // } = await keystone.executeGraphQL({
+//   //   context: keystone.createContext({ skipAccessControl: true }),
+//   //   query: `query {
+//   //     Todo {
+//   //       name
+//   //     }
+//   //   }`,
+//   // });
 
-  // Count existing users
-  const {
-    data: {
-      _allUsersMeta: { count = 0 },
-    },
-  } = await keystone.executeGraphQL({
-    context: keystone.createContext({ skipAccessControl: true }),
-    query: `query {
-      _allUsersMeta {
-        count
-      }
-    }`,
-  });
+//   // console.log(data)
 
-  if (count === 0) {
-    const password = "keystoneroot";
-    const email = 'admin@example.com';
+//   // Count existing users
+//   const {
+//     data: {
+//       _allUsersMeta: { count = 0 },
+//     },
+//   } = await keystone.executeGraphQL({
+//     context: keystone.createContext({ skipAccessControl: true }),
+//     query: `query {
+//       _allUsersMeta {
+//         count
+//       }
+//     }`,
+//   });
 
-    const { errors } = await keystone.executeGraphQL({
-      context: keystone.createContext({ skipAccessControl: true }),
-      query: `mutation initialUser($password: String, $email: String) {
-            createUser(data: {name: "Admin", email: $email, isAdmin: true, password: $password}) {
-              id
-            }
-          }`,
-      variables: { password, email },
-    });
+//   if (count === 0) {
+//     const password = "keystoneroot";
+//     const email = 'admin@example.com';
 
-    if (errors) {
-      console.log('failed to create initial user:');
-      console.log(errors);
-    } else {
-      console.log(`
+//     const { errors } = await keystone.executeGraphQL({
+//       context: keystone.createContext({ skipAccessControl: true }),
+//       query: `mutation initialUser($password: String, $email: String) {
+//             createUser(data: {name: "Admin", email: $email, isAdmin: true, password: $password}) {
+//               id
+//             }
+//           }`,
+//       variables: { password, email },
+//     });
 
-      User created:
-        email: ${email}
-        password: ${password}
-      Please change these details after initial login.
-      `);
-    }
-  }
-};
+//     if (errors) {
+//       console.log('failed to create initial user:');
+//       console.log(errors);
+//     } else {
+//       console.log(`
+
+//       User created:
+//         email: ${email}
+//         password: ${password}
+//       Please change these details after initial login.
+//       `);
+//     }
+//   }
+// };

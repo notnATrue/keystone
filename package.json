@@ -11,10 +11,13 @@
     "node": ">=10.0.0"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development DISABLE_LOGGING=true keystone dev",
+    "clean": "rimraf dist/*",
+    "watch": "tsc -w",
+    "tsc": "tsc",
+    "ts:build": "npm-run-all clean tsc",
+    "dev": "cross-env NODE_ENV=development DISABLE_LOGGING=true keystone dev --entry ./dist/index.js",
     "build": "cross-env NODE_ENV=production keystone build",
-    "start": "cross-env NODE_ENV=production keystone start",
-    "create-tables": "cross-env CREATE_TABLES=true keystone create-tables"
+    "start": "cross-env NODE_ENV=production keystone start"
   },
   "dependencies": {
     "@keystonejs/adapter-mongoose": "^10.0.1",
@@ -24,6 +27,12 @@
     "@keystonejs/fields": "^20.0.0",
     "@keystonejs/keystone": "^17.1.1",
     "cross-env": "^7.0.2",
-    "mongoose": "^5.10.14"
+    "dotenv": "^8.2.0",
+    "mongoose": "^5.10.14",
+    "npm-run-all": "^4.1.5"
+  },
+  "devDependencies": {
+    "rimraf": "^3.0.2",
+    "typescript": "^4.0.5"
   }
 }
